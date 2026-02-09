@@ -21,7 +21,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, isAuthenticate
               onClick={() => onNavigate('HOME')}
               className="text-2xl font-black text-indigo-600 tracking-tighter"
             >
-              CHRONICLE
+              The Terai Times
             </button>
             
             <div className="hidden md:flex items-center gap-6">
