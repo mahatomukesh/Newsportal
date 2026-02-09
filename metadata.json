@@ -1,0 +1,6 @@
+
+{
+  "name": "RamBlog",
+  "description": "A high-performance news and blog application featuring real-time headlines, role-based access control, and a simulated full-stack architecture with PostgreSQL-ready data structures.",
+  "requestFramePermissions": []
+}
