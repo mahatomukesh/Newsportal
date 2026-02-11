@@ -5,6 +5,7 @@ import { db } from './db';
 
 // Components
 import Navbar from './components/Navbar';
+import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import NewsList from './pages/NewsList';
 import NewsDetail from './pages/NewsDetail';
@@ -16,6 +17,7 @@ import AboutUs from './pages/AboutUs';
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('HOME');
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [auth, setAuth] = useState<AuthState>(() => {
     const saved = localStorage.getItem('auth');
     return saved ? JSON.parse(saved) : { user: null, token: null, isAuthenticated: false };
@@ -24,6 +26,10 @@ const App: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('auth', JSON.stringify(auth));
   }, [auth]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentView]);
 
   const handleLogin = (user: User) => {
     setAuth({
@@ -44,13 +50,18 @@ const App: React.FC = () => {
     setCurrentView('NEWS_DETAIL');
   };
 
+  const navigateToNews = (categoryId?: string) => {
+    setSelectedCategoryId(categoryId || null);
+    setCurrentView('NEWS');
+  };
+
   // Guarded routing logic
   const renderContent = () => {
     switch (currentView) {
       case 'HOME':
         return <Home onNavigateNews={() => setCurrentView('NEWS')} onNavigateDetail={navigateToArticle} />;
       case 'NEWS':
-        return <NewsList onNavigateDetail={navigateToArticle} />;
+        return <NewsList categoryId={selectedCategoryId} onNavigateDetail={navigateToArticle} />;
       case 'NEWS_DETAIL':
         return <NewsDetail articleId={selectedArticleId!} onBack={() => setCurrentView('NEWS')} />;
       case 'ABOUT':
@@ -74,7 +85,8 @@ const App: React.FC = () => {
     <div className="flex flex-col min-h-screen">
       <Navbar 
         currentView={currentView} 
-        onNavigate={setCurrentView} 
+        onNavigate={setCurrentView}
+        onNavigateToNews={navigateToNews}
         isAuthenticated={auth.isAuthenticated}
         user={auth.user}
       />
@@ -85,7 +97,7 @@ const App: React.FC = () => {
         <div className="container mx-auto px-4 max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="space-y-6">
             <div>
-              <h3 className="text-xl font-bold mb-4">MukeshBlog</h3>
+              <h3 className="text-xl font-bold mb-4">RamjiBlog</h3>
               <p className="text-gray-400">Delivering reliable, unbiased news and insights to your screen since 2024. Stay informed with the latest updates from around the globe.</p>
             </div>
             
@@ -152,9 +164,10 @@ const App: React.FC = () => {
           </div>
         </div>
         <div className="container mx-auto px-4 max-w-7xl text-center border-t border-gray-800 pt-6">
-          <p className="text-sm text-gray-500">© {new Date().getFullYear()} MukeshBlog. All rights reserved.</p>
+          <p className="text-sm text-gray-500">© {new Date().getFullYear()} RamjiBlog. All rights reserved.</p>
         </div>
       </footer>
+      <ScrollToTopButton />
     </div>
   );
 };

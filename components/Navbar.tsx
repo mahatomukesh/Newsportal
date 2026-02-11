@@ -1,16 +1,38 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, User } from '../types';
+import { db } from '../db';
 
 interface NavbarProps {
   currentView: View;
   onNavigate: (view: View) => void;
+  onNavigateToNews: (categoryId?: string) => void;
   isAuthenticated: boolean;
   user: User | null;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, isAuthenticated, user }) => {
+const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onNavigateToNews, isAuthenticated, user }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [newsDropdownOpen, setNewsDropdownOpen] = useState(false);
+  const newsDropdownRef = useRef<HTMLDivElement>(null);
+  const categories = db.getCategories();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (newsDropdownRef.current && !newsDropdownRef.current.contains(event.target as Node)) {
+        setNewsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleNewsNavigation = (categoryId?: string) => {
+    setNewsDropdownOpen(false);
+    onNavigate('NEWS');
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -31,11 +53,44 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, isAuthenticate
               >
                 HOME
               </button>
+              
+              {/* News Dropdown */}
+              <div className="relative" ref={newsDropdownRef}>
+                <button 
+                  onClick={() => setNewsDropdownOpen(!newsDropdownOpen)}
+                  className={`font-medium text-sm transition ${currentView === 'NEWS' ? 'text-indigo-600' : 'text-gray-500 hover:text-indigo-600'}`}
+                >
+                  NEWS
+                </button>
+
+                {/* Dropdown Menu */}
+                {newsDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-50 py-1">
+                    <button
+                      onClick={() => { onNavigateToNews(); setNewsDropdownOpen(false); }}
+                      className="w-full text-left px-4 py-2 hover:bg-indigo-50 transition font-medium text-sm text-gray-700"
+                    >
+                      All News
+                    </button>
+                    <div className="border-t border-gray-100 my-1"></div>
+                    {categories.map((category) => (
+                      <button
+                        key={category.id}
+                        onClick={() => { onNavigateToNews(category.id); setNewsDropdownOpen(false); }}
+                        className="w-full text-left px-4 py-2 hover:bg-indigo-50 transition text-sm text-gray-600 hover:text-indigo-600"
+                      >
+                        {category.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <button 
-                onClick={() => onNavigate('NEWS')}
-                className={`font-medium text-sm transition ${currentView === 'NEWS' ? 'text-indigo-600' : 'text-gray-500 hover:text-indigo-600'}`}
+                onClick={() => onNavigate('ABOUT')}
+                className={`font-medium text-sm transition ${currentView === 'ABOUT' ? 'text-indigo-600' : 'text-gray-500 hover:text-indigo-600'}`}
               >
-                NEWS
+                ABOUT US
               </button>
             </div>
           </div>
@@ -75,7 +130,40 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, isAuthenticate
       {isOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-4">
           <button onClick={() => { onNavigate('HOME'); setIsOpen(false); }} className="block w-full text-left font-medium">Home</button>
-          <button onClick={() => { onNavigate('NEWS'); setIsOpen(false); }} className="block w-full text-left font-medium">News</button>
+          
+          {/* Mobile News Dropdown */}
+          <div className="space-y-2">
+            <button 
+              onClick={() => setNewsDropdownOpen(!newsDropdownOpen)}
+              className="flex items-center gap-2 font-medium w-full text-left"
+            >
+              News
+              <svg className={`w-4 h-4 transition-transform ${newsDropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </button>
+            {newsDropdownOpen && (
+              <div className="pl-4 space-y-2 border-l-2 border-indigo-300">
+                <button
+                  onClick={() => { onNavigateToNews(); setIsOpen(false); setNewsDropdownOpen(false); }}
+                  className="block w-full text-left text-sm text-gray-600 hover:text-indigo-600 py-1"
+                >
+                  All News
+                </button>
+                {categories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => { onNavigateToNews(category.id); setIsOpen(false); setNewsDropdownOpen(false); }}
+                    className="block w-full text-left text-sm text-gray-600 hover:text-indigo-600 py-1"
+                  >
+                    {category.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <button onClick={() => { onNavigate('ABOUT'); setIsOpen(false); }} className="block w-full text-left font-medium">About Us</button>
           <hr />
           {isAuthenticated ? (
             <button onClick={() => { onNavigate('PROFILE'); setIsOpen(false); }} className="block w-full text-left font-medium">Profile</button>

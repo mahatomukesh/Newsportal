@@ -6,14 +6,21 @@ import NewsCard from '../components/NewsCard';
 
 interface NewsListProps {
   onNavigateDetail: (id: string) => void;
+  categoryId?: string | null;
 }
 
-const NewsList: React.FC<NewsListProps> = ({ onNavigateDetail }) => {
+const NewsList: React.FC<NewsListProps> = ({ onNavigateDetail, categoryId }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   
   const news = db.getNews();
   const categories = db.getCategories();
+
+  // Sync selectedCategory when navigated from navbar
+  React.useEffect(() => {
+    if (categoryId) setSelectedCategory(categoryId);
+    else setSelectedCategory('ALL');
+  }, [categoryId]);
 
   const filteredNews = useMemo(() => {
     return news.filter(n => {
