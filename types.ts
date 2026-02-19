@@ -26,6 +26,28 @@ export interface NewsArticle {
   createdAt: string;
   imageUrl: string;
   isTrending?: boolean;
+  readTime?: number; // minutes
+  views?: number;
+  comments?: Comment[];
+  tags?: string[];
+  isBreaking?: boolean;
+  isFeatured?: boolean;
+}
+
+export interface Comment {
+  id: string;
+  userId: string;
+  userName: string;
+  content: string;
+  createdAt: string;
+  likes?: number;
+}
+
+export interface Newsletter {
+  id: string;
+  email: string;
+  subscribedAt: string;
+  categories?: string[];
 }
 
 export interface AuthState {
@@ -34,4 +56,4 @@ export interface AuthState {
   isAuthenticated: boolean;
 }
 
-export type View = 'HOME' | 'NEWS' | 'NEWS_DETAIL' | 'PROFILE' | 'LOGIN' | 'SYSTEM_DOCS' | 'ABOUT';
+export type View = 'HOME' | 'NEWS' | 'NEWS_DETAIL' | 'PROFILE' | 'LOGIN' | 'SYSTEM_DOCS' | 'ABOUT' | 'ARCHIVE' | 'BLOG' | 'BOOKMARKS' | 'SETTINGS';
