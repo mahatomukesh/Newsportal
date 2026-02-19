@@ -17,24 +17,20 @@ const Settings: React.FC = () => {
     pushNotifications: false
   });
 
-  const [showSaveMessage, setShowSaveMessage] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     // Load preferences from localStorage
-    const savedPreferences = localStorage.getItem('user_preferences');
-    if (savedPreferences) {
-      try {
-        setPreferences(JSON.parse(savedPreferences));
-      } catch (e) {
-        console.error('Failed to load preferences:', e);
-      }
+    const saved = localStorage.getItem('user_preferences');
+    if (saved) {
+      setPreferences(JSON.parse(saved));
     }
   }, []);
 
   const handleSave = () => {
     localStorage.setItem('user_preferences', JSON.stringify(preferences));
-    setShowSaveMessage(true);
-    setTimeout(() => setShowSaveMessage(false), 3000);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
   };
 
   const handleReset = () => {
@@ -48,16 +44,6 @@ const Settings: React.FC = () => {
     setPreferences(defaults);
   };
 
-  const handleClearAllData = () => {
-    if (window.confirm('Are you sure? This will clear all bookmarks, search history, and preferences.')) {
-      localStorage.removeItem('bookmarks');
-      localStorage.removeItem('search_history');
-      localStorage.removeItem('user_preferences');
-      handleReset();
-      setShowSaveMessage(true);
-    }
-  };
-
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Header */}
@@ -67,7 +53,7 @@ const Settings: React.FC = () => {
       </div>
 
       {/* Success Message */}
-      {showSaveMessage && (
+      {saved && (
         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 font-medium">
           ✓ Preferences saved successfully!
         </div>
@@ -169,9 +155,7 @@ const Settings: React.FC = () => {
         {/* Account Settings */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">👤 Account</h2>
-          <button 
-            onClick={handleClearAllData}
-            className="px-4 py-2 text-red-600 hover:text-red-700 font-medium border border-red-200 rounded-lg hover:bg-red-50 transition">
+          <button className="px-4 py-2 text-red-600 hover:text-red-700 font-medium border border-red-200 rounded-lg hover:bg-red-50 transition">
             Clear All Data
           </button>
           <p className="text-sm text-gray-500 mt-2">This will clear all your bookmarks, search history, and preferences</p>

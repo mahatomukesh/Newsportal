@@ -1,0 +1,88 @@
+/* Improved global styles for ramblog */
+:root {
+  --primary-color: #2d6cdf;
+  --secondary-color: #f5f7fa;
+  --accent-color: #fbbc05;
+  --text-color: #222;
+  --border-radius: 8px;
+  --transition: 0.2s all;
+}
+
+body {
+  font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+  background: var(--secondary-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+header, footer {
+  background: var(--primary-color);
+  color: #fff;
+  padding: 1rem 2rem;
+  text-align: center;
+}
+
+main {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+h1, h2, h3 {
+  color: var(--primary-color);
+  margin-top: 0;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+a:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+button, .btn {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+button:hover, .btn:hover {
+  background: var(--accent-color);
+  color: #222;
+}
+
+input, textarea, select {
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+ul, ol {
+  padding-left: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 1rem;
+    margin: 1rem;
+  }
+  header, footer {
+    padding: 0.5rem 1rem;
+  }
+}

@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, User, Category } from '../types';
 import { db } from '../db';
-import { useDarkMode } from '../contexts/DarkModeContext';
 
 interface NavbarProps {
   currentView: View;
@@ -14,7 +13,6 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onNavigateToNews, onSearch, isAuthenticated, user }) => {
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [isOpen, setIsOpen] = useState(false);
   const [newsDropdownOpen, setNewsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
