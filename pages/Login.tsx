@@ -16,10 +16,11 @@ const Login: React.FC<LoginProps> = ({ onLogin, onCancel }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const user = db.getUserByEmail(email);
-    if (user) {
+    // Simple demo password check: all demo accounts use password 'password'
+    if (user && password === 'password') {
       onLogin(user);
     } else {
-      setError('Invalid credentials. Hint: use admin@chronicle.com or jane@example.com');
+      setError('Invalid credentials. Use demo password: "password" for provided autofill accounts.');
     }
   };
 

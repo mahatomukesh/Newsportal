@@ -5,9 +5,10 @@ import NewsCard from '../components/NewsCard';
 import TrendingAndMostRead from '../components/TrendingAndMostRead';
 import InlineAds from '../components/InlineAds';
 import PopularSearches from '../components/PopularSearches';
+import SidebarAds from '../components/SidebarAds';
 
 interface HomeProps {
-  onNavigateNews: () => void;
+  onNavigateNews: (categoryId?: string) => void;
   onNavigateDetail: (id: string) => void;
 }
 
@@ -20,7 +21,8 @@ const Home: React.FC<HomeProps> = ({ onNavigateNews, onNavigateDetail }) => {
   const latest = useMemo(() => news.slice(0, 6), [news]);
 
   return (
-    <div className="space-y-16">
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="lg:col-span-3 space-y-16">
       {/* Breaking News Alert */}
       {breakingNews.length > 0 && (
         <section className="p-6 bg-gradient-to-r from-red-600 to-red-700 rounded-2xl text-white">
@@ -52,7 +54,7 @@ const Home: React.FC<HomeProps> = ({ onNavigateNews, onNavigateDetail }) => {
               <p className="text-gray-500">Today's top pick from our editors</p>
             </div>
             <button 
-              onClick={onNavigateNews}
+              onClick={() => onNavigateNews()}
               className="text-indigo-600 font-bold text-sm hover:underline hidden md:block"
             >
               See all stories &rarr;
@@ -80,28 +82,28 @@ const Home: React.FC<HomeProps> = ({ onNavigateNews, onNavigateDetail }) => {
       {/* Inline Ad */}
       <InlineAds showSponsored={true} />
 
-      {/* Category Previews */}
+        {/* Category Previews */}
       <section>
         <h2 className="text-2xl font-bold mb-6">Browse by Category</h2>
         <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
           {categories.map(cat => (
             <button 
               key={cat.id}
-              onClick={onNavigateNews}
+              onClick={() => onNavigateNews(cat.id)}
               className="flex-shrink-0 px-6 py-3 rounded-xl bg-white border border-gray-200 shadow-sm hover:border-indigo-400 hover:text-indigo-600 transition font-bold text-sm"
             >
               {cat.name}
             </button>
           ))}
         </div>
-      </section>
+        </section>
 
-      {/* Latest News Feed */}
-      <section>
+        {/* Latest News Feed */}
+        <section>
         <div className="flex justify-between items-end mb-8">
           <h2 className="text-2xl font-bold">Latest Headlines</h2>
           <button 
-            onClick={onNavigateNews}
+            onClick={() => onNavigateNews()}
             className="text-indigo-600 font-bold text-sm hover:underline"
           >
             Explore all →
@@ -114,13 +116,26 @@ const Home: React.FC<HomeProps> = ({ onNavigateNews, onNavigateDetail }) => {
         </div>
         <div className="mt-12 text-center">
           <button 
-            onClick={onNavigateNews}
+            onClick={() => onNavigateNews()}
             className="px-8 py-4 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition shadow-lg"
           >
             Explore More News
           </button>
         </div>
-      </section>
+        </section>
+      </div>
+
+      {/* Sidebar for desktop */}
+      <div className="lg:col-span-1">
+        <div className="hidden lg:block">
+          {/* Categories accessible via the top Categories button */}
+        </div>
+        <SidebarAds />
+      </div>
+      {/* Mobile sidebar above content */}
+      <div className="block lg:hidden col-span-1">
+        {/* Categories accessible via the top Categories button */}
+      </div>
     </div>
   );
 };

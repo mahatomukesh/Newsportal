@@ -56,4 +56,4 @@ export interface AuthState {
   isAuthenticated: boolean;
 }
 
-export type View = 'HOME' | 'NEWS' | 'NEWS_DETAIL' | 'PROFILE' | 'LOGIN' | 'SYSTEM_DOCS' | 'ABOUT' | 'ARCHIVE' | 'BLOG' | 'BOOKMARKS' | 'SETTINGS';
+export type View = 'HOME' | 'NEWS' | 'NEWS_DETAIL' | 'PROFILE' | 'LOGIN' | 'SYSTEM_DOCS' | 'ABOUT' | 'ARCHIVE' | 'BLOG' | 'BOOKMARKS' | 'SETTINGS' | 'ADMIN';

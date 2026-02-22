@@ -1,12 +1,15 @@
 import React from 'react';
 import { View } from '../types';
+import { db } from '../db';
 import Ad from './Ad';
 
 interface FooterProps {
   onNavigate: (view: View) => void;
+  onNavigateToNews: (categoryId?: string) => void;
 }
 
-const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+const Footer: React.FC<FooterProps> = ({ onNavigate, onNavigateToNews }) => {
+  const categories = db.getCategories();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -75,11 +78,13 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div>
             <h4 className="text-white font-bold mb-6 text-sm uppercase tracking-wider">Categories</h4>
             <ul className="space-y-3 text-sm">
-              <li><a href="#" className="text-gray-400 hover:text-white transition">Technology</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition">Politics</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition">Business</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition">Sports</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition">Entertainment</a></li>
+              {categories.map(cat => (
+                <li key={cat.id}>
+                  <button onClick={() => onNavigateToNews(cat.id)} className="text-gray-400 hover:text-white transition">
+                    {cat.name}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 

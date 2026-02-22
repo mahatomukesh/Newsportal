@@ -51,27 +51,7 @@ const PopularSearches: React.FC<PopularSearchesProps> = ({ onSearch }) => {
     }
   };
 
-  return (
-    <section className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg p-6 mb-8">
-      <h3 className="text-lg font-bold text-gray-900 mb-4">📈 Popular Searches</h3>
-      <div className="flex flex-wrap gap-2">
-        {searches.map((search, index) => (
-          <button
-            key={search.term}
-            onClick={() => handleSearchClick(search.term)}
-            className="group relative px-4 py-2 bg-white rounded-full text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition shadow-sm hover:shadow-md"
-          >
-            <span className="flex items-center gap-2">
-              {search.term}
-              <span className="text-xs text-gray-400 group-hover:text-indigo-500 bg-gray-100 group-hover:bg-indigo-100 px-2 py-0.5 rounded-full transition">
-                {search.count}
-              </span>
-            </span>
-          </button>
-        ))}
-      </div>
-    </section>
-  );
+ 
 };
 
 export default PopularSearches;

@@ -22,6 +22,7 @@ import Bookmarks from './pages/Bookmarks';
 import Settings from './pages/Settings';
 import StickyAd from './components/StickyAd';
 import PopUpAd from './components/PopUpAd';
+import Admin from './pages/Admin';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('HOME');
@@ -80,13 +81,15 @@ const App: React.FC = () => {
   const renderContent = () => {
     switch (currentView) {
       case 'HOME':
-        return <Home onNavigateNews={() => setCurrentView('NEWS')} onNavigateDetail={navigateToArticle} />;
+        return <Home onNavigateNews={navigateToNews} onNavigateDetail={navigateToArticle} />;
       case 'NEWS':
-        return <NewsList categoryId={selectedCategoryId} initialSearch={searchQuery} onNavigateDetail={navigateToArticle} onSearchChange={handleSearchChange} />;
+        return <NewsList categoryId={selectedCategoryId} initialSearch={searchQuery} onNavigateDetail={navigateToArticle} />;
       case 'NEWS_DETAIL':
         return <NewsDetail articleId={selectedArticleId!} onBack={() => setCurrentView('NEWS')} onNavigateDetail={navigateToArticle} />;
       case 'ARCHIVE':
         return <Archive onNavigateDetail={navigateToArticle} />;
+      case 'ADMIN':
+        return <Admin onNavigate={setCurrentView} />;
       case 'ABOUT':
         return <AboutUs />;
       case 'PROFILE':
@@ -98,7 +101,7 @@ const App: React.FC = () => {
       case 'LOGIN':
         return <Login onLogin={handleLogin} onCancel={() => setCurrentView('HOME')} />;
       case 'BLOG':
-        return <NewsList categoryId={selectedCategoryId} initialSearch={searchQuery} onNavigateDetail={navigateToArticle} onSearchChange={handleSearchChange} />;
+        return <NewsList categoryId={selectedCategoryId} initialSearch={searchQuery} onNavigateDetail={navigateToArticle} />;
       case 'SYSTEM_DOCS':
         return <SystemDocs />;
       case 'BOOKMARKS':
@@ -106,7 +109,7 @@ const App: React.FC = () => {
       case 'SETTINGS':
         return <Settings />;
       default:
-        return <Home onNavigateNews={() => setCurrentView('NEWS')} onNavigateDetail={navigateToArticle} />;
+        return <Home onNavigateNews={navigateToNews} onNavigateDetail={navigateToArticle} />;
     }
   };
 
@@ -126,7 +129,7 @@ const App: React.FC = () => {
         {renderContent()}
       </main>
       {currentView !== 'NEWS_DETAIL' && <Newsletter />}
-      <Footer onNavigate={setCurrentView} />
+      <Footer onNavigate={setCurrentView} onNavigateToNews={navigateToNews} />
       <ScrollToTopButton />
       <StickyAd />
       <PopUpAd />
